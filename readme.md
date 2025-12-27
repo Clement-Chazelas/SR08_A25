@@ -1,41 +1,50 @@
 # Système de Surveillance Intelligent (SR08)
 
-Ce projet est une solution de sécurité IoT autonome. Il combine la détection physique (capteur PIR) pour l'économie d'énergie et l'intelligence artificielle (YOLOv8) pour la validation visuelle des intrusions. Les alertes sont stockées localement et accessibles via une interface web, consultable en local ou via le Cloud.
+Ce projet est une solution de sécurité **IoT (Internet of Things)** autonome, conçue pour la surveillance de zones sensibles (type musée).
 
-## Stack Technique
+L'architecture privilégie une approche **"Green IT"** et **Edge Computing** : le système reste en veille pour économiser l'énergie et ne déclenche l'analyse lourde (Intelligence Artificielle) que lorsqu'une présence physique est détectée. Les alertes sont consultables en temps réel via une interface Web locale synchronisée avec le Cloud.
 
-* **Langage** : Python 3.x
-* **Vision par Ordinateur** : OpenCV (`opencv-python`)
-* **IA** : Ultralytics YOLOv8 (Modèle Nano `yolov8n.pt`)
-* **Interface Web** : Flask
-* **Base de Données** : SQLite (Intégrée)
-* **Matériel (IoT)** : Gpiozero (Gestion du PIR)
-* **Cloud / Accès Distant** : Ngrok (Tunneling)
+---
 
-## Prérequis Matériel
+## 🛠️ Stack Technique
 
-1.  **Raspberry Pi** (ou PC pour test).
-2.  **Webcam USB**.
-3.  **Capteur de mouvement PIR** (Pin DATA sur GPIO 4 / Broche 7).
+Le projet s'appuie sur une stack Python moderne et optimisée pour l'embarqué :
 
-## Installation
+* **Matériel (Edge)** :
+    * **Raspberry Pi 4** (OS 64-bit).
+    * **Capteur PIR** : Déclencheur physique basse consommation.
+    * **Webcam** : Acquisition vidéo à la demande.
+* **Intelligence Artificielle & Vision** :
+    * **YOLOv8 Nano (Ultralytics)** : Modèle de détection d'objets rapide et léger, capable d'identifier une personne en moins de 200ms sur RPi.
+    * **OpenCV** : Traitement des flux vidéo et capture des preuves.
+* **Backend & Données** :
+    * **Flask** : Serveur Web léger pour l'interface de gestion.
+    * **SQLite** : Base de données embarquée pour l'historique des événements (Date, Objet, Photo).
+* **Infrastructure & Cloud** :
+    * **Pyngrok** : Automatisation du tunneling sécurisé pour rendre le Raspberry Pi accessible depuis internet sans configuration de routeur.
 
-1.  **Fichiers** : Placez `main.py` et `interface.py` dans le même dossier.
-2.  **Dépendances** :
-    ```bash
-    pip install flask opencv-python ultralytics gpiozero
-    ```
-3.  **Outil Cloud (Ngrok)** :
-    * Installez Ngrok : `sudo apt install ngrok` (sur Raspberry Pi) ou via le site officiel.
-    * Connectez votre compte (obligatoire pour le cloud) :
-      ```bash
-      ngrok config add-authtoken VOTRE_TOKEN
-      ```
+---
 
-## Démarrage du Système (3 Terminaux)
+## 🔌 Câblage Matériel
 
-Pour avoir le système complet (Détection + Site Web + Accès Cloud), lancez ces 3 commandes dans des terminaux séparés.
+Pour que le script fonctionne, le montage suivant est requis :
 
-### 1. Lancer l'Interface Web
+* **Webcam** : Port USB 3.0 (Bleu).
+* **Capteur PIR** :
+    * VCC → Pin 2 (5V)
+    * GND → Pin 6 (GND)
+    * **OUT (Data) → Pin 7 (GPIO 4)**
+
+---
+
+## 🚀 Installation
+
+### 1. Prérequis
+Assurez-vous d'utiliser **Raspberry Pi OS (64-bit)** pour la compatibilité avec les bibliothèques d'IA modernes (Torch/YOLO).
+
+### 2. Récupération du projet
+Ouvrez un terminal sur le Raspberry Pi :
 ```bash
-python interface.py
+cd ~
+git clone [https://github.com/Clement-Chazelas/SR08_A25.git](https://github.com/Clement-Chazelas/SR08_A25.git)
+cd SR08_A25
